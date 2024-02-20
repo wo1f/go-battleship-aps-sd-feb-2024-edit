@@ -127,6 +127,15 @@ func drawState() {
 	}
 }
 
+func isEndGame(ships []*controller.Ship) bool {
+	for _, ship := range ships {
+		if ship.IsAlive() {
+			return false
+		}
+	}
+	return true
+}
+
 func round(number int) {
 	printer.Printf("==============================================\n")
 	printer.Printf("Round %d\n", number)
@@ -135,7 +144,18 @@ func round(number int) {
 	drawState()
 
 	myShot()
+	if isEndGame(enemyFleet) {
+		printer.SetForegroundColor(console.RED)
+		printer.Println("You Win!")
+		os.Exit(0)
+	}
+
 	enemyShot()
+	if isEndGame(myFleet) {
+		printer.SetForegroundColor(console.RED)
+		printer.Println("You Lose!")
+		os.Exit(0)
+	}
 }
 
 func startGame() {
@@ -172,9 +192,9 @@ func beep() {
 }
 
 func initializeGame() {
-	//initializeMyFleet()
+	initializeMyFleet()
 
-	initializeMyFleetConst()
+	//initializeMyFleetConst()
 
 	initializeEnemyFleet()
 }
