@@ -63,43 +63,13 @@ func myShot() {
 			if err != nil {
 				printer.Printf("Error: %s\n", err)
 			}
+			fmt.Println(enemyFleet[4].IsAlive())
 			break
 		}
 	}
 
 	resultOfShot(isHit)
 
-}
-
-const HitColor = console.ORANGE
-const MissColor = console.CADET_BLUE
-const planeColor = console.WHITE
-const explosionColor = console.RED
-
-func drawExplosion() {
-	beep()
-	printer.SetForegroundColor(explosionColor)
-	printer.Println("                \\         .  ./")
-	printer.Println("              \\      .:\" \";'.:..\" \"   /")
-	printer.Println("                  (M^^.^~~:.'\" \").")
-	printer.Println("            -   (/  .    . . \\ \\)  -")
-	printer.Println("               ((| :. ~ ^  :. .|))")
-	printer.Println("            -   (\\- |  \\ /  |  /)  -")
-	printer.Println("                 -\\  \\     /  /-")
-	printer.Println("                   \\  \\   /  /")
-	printer.SetForegroundColor(planeColor)
-}
-
-func resultOfShot(isHit bool) {
-	if isHit {
-		drawExplosion()
-		printer.SetForegroundColor(HitColor)
-		printer.Println("Yeah ! Nice hit !")
-	} else {
-		printer.SetForegroundColor(MissColor)
-		printer.Println("Miss")
-	}
-	printer.SetForegroundColor(planeColor)
 }
 
 func enemyShot() {
@@ -127,10 +97,43 @@ func enemyShot() {
 
 }
 
+func drawState() {
+	var destroyedShips []*controller.Ship
+	var aliveShips []*controller.Ship
+	for _, ship := range enemyFleet {
+		if !ship.IsAlive() {
+			destroyedShips = append(destroyedShips, ship)
+		} else {
+			aliveShips = append(aliveShips, ship)
+		}
+	}
+	if len(destroyedShips) != 0 {
+		printer.Printf("You have destroyed the following ships:\n")
+		for _, ship := range destroyedShips {
+			printer.SetForegroundColor(ship.Color)
+			printer.Printf("%s (%d holes)\n", ship.Name, ship.Size)
+		}
+		printer.SetForegroundColor(planeColor)
+		printer.Println("==============================================")
+	}
+	if len(aliveShips) != 0 {
+		printer.Printf("The enemy still has ships:\n")
+		for _, ship := range aliveShips {
+			printer.SetForegroundColor(ship.Color)
+			printer.Printf("%s (%d holes)\n", ship.Name, ship.Size)
+
+		}
+		printer.SetForegroundColor(planeColor)
+	}
+}
+
 func round(number int) {
 	printer.Printf("==============================================\n")
 	printer.Printf("Round %d\n", number)
 	printer.Printf("==============================================\n")
+
+	drawState()
+
 	myShot()
 	enemyShot()
 }
@@ -260,4 +263,35 @@ func initializeEnemyFleet() {
 
 	enemyFleet[4].SetPositions(&controller.Position{Column: letter.C, Row: 5})
 	enemyFleet[4].SetPositions(&controller.Position{Column: letter.C, Row: 6})
+}
+
+const HitColor = console.ORANGE
+const MissColor = console.CADET_BLUE
+const planeColor = console.WHITE
+const explosionColor = console.RED
+
+func drawExplosion() {
+	beep()
+	printer.SetForegroundColor(explosionColor)
+	printer.Println("                \\         .  ./")
+	printer.Println("              \\      .:\" \";'.:..\" \"   /")
+	printer.Println("                  (M^^.^~~:.'\" \").")
+	printer.Println("            -   (/  .    . . \\ \\)  -")
+	printer.Println("               ((| :. ~ ^  :. .|))")
+	printer.Println("            -   (\\- |  \\ /  |  /)  -")
+	printer.Println("                 -\\  \\     /  /-")
+	printer.Println("                   \\  \\   /  /")
+	printer.SetForegroundColor(planeColor)
+}
+
+func resultOfShot(isHit bool) {
+	if isHit {
+		drawExplosion()
+		printer.SetForegroundColor(HitColor)
+		printer.Println("Yeah ! Nice hit !")
+	} else {
+		printer.SetForegroundColor(MissColor)
+		printer.Println("Miss")
+	}
+	printer.SetForegroundColor(planeColor)
 }

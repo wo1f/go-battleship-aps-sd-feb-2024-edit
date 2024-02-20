@@ -10,6 +10,7 @@ import (
 type Position struct {
 	Column letter.Letter
 	Row    int
+	Hitted bool
 }
 
 type Ship struct {
@@ -45,4 +46,14 @@ func (s *Ship) GetPositions() []Position {
 
 func (s *Ship) SetPositions(p *Position) {
 	s.positions = append(s.positions, *p)
+}
+
+func (s *Ship) IsAlive() bool {
+	hittedCount := 0
+	for _, pos := range s.positions {
+		if pos.Hitted {
+			hittedCount++
+		}
+	}
+	return s.Size != hittedCount
 }

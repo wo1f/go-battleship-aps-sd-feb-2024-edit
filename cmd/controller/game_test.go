@@ -22,7 +22,7 @@ func TestCheckIsHitTrue(t *testing.T) {
 		counter++
 	}
 
-	result, _ := CheckIsHit(ships, &Position{letter.A, 1})
+	result, _ := CheckIsHit(ships, &Position{Column: letter.A, Row: 1})
 
 	assert.True(t, result)
 }
@@ -41,7 +41,7 @@ func TestCheckIsHitFalse(t *testing.T) {
 		counter++
 	}
 
-	result, _ := CheckIsHit(ships, &Position{letter.H, 1})
+	result, _ := CheckIsHit(ships, NewPosition(letter.H, 1))
 
 	assert.False(t, result)
 }
@@ -54,7 +54,7 @@ func TestCheckIsHitPositstionIsNull(t *testing.T) {
 }
 
 func TestCheckIsHitShipIsNull(t *testing.T) {
-	_, err := CheckIsHit(nil, &Position{letter.H, 1})
+	_, err := CheckIsHit(nil, NewPosition(letter.H, 1))
 
 	fmt.Println(err)
 
@@ -70,7 +70,7 @@ func TestIsShipValidFalse(t *testing.T) {
 }
 
 func TestIsShipValidTrue(t *testing.T) {
-	positions := []Position{{letter.A, 1}, {letter.A, 1}, {letter.A, 1}}
+	positions := []Position{{Column: letter.A, Row: 1}, {Column: letter.A, Row: 1}, {Column: letter.A, Row: 1}}
 	ship := Ship{Name: "TestShip", Size: 3, positions: positions}
 
 	result := IsShipValid(ship)

@@ -18,8 +18,9 @@ func CheckIsHit(ships []*Ship, shot *Position) (bool, error) {
 	}
 
 	for _, ship := range ships {
-		for _, position := range ship.positions {
-			if shot.Row == position.Row && shot.Column == position.Column {
+		for i, _ := range ship.positions {
+			if shot.Row == ship.positions[i].Row && shot.Column == ship.positions[i].Column {
+				ship.positions[i].Hitted = true
 				return true, nil
 			}
 		}
