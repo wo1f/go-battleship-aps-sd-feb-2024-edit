@@ -20,8 +20,7 @@ var (
 )
 var printer = console.ColoredPrinter(1, false).Background(console.BLACK).Foreground(console.WHITE).Build()
 
-func main() {
-
+func run() {
 	scanner = bufio.NewScanner(os.Stdin)
 
 	printer.SetForegroundColor(console.MAGENTA)
@@ -46,6 +45,96 @@ func main() {
 	startGame()
 }
 
+func main() {
+	run()
+}
+
+func myShot() {
+	printer.Println("")
+	printer.Println("Player, it's your turn")
+	printer.Println("Enter coordinates for your shot (i.e A3) :")
+	var isHit bool
+	for scanner.Scan() {
+		input := scanner.Text()
+		if input != "" {
+			position := parsePosition(input)
+			var err error
+			isHit, err = controller.CheckIsHit(enemyFleet, position)
+			if err != nil {
+				printer.Printf("Error: %s\n", err)
+			}
+			break
+		}
+	}
+
+	resultOfShot(isHit)
+
+}
+
+const HitColor = console.ORANGE
+const MissColor = console.CADET_BLUE
+const planeColor = console.WHITE
+const explosionColor = console.RED
+
+func drawExplosion() {
+	beep()
+	printer.SetForegroundColor(explosionColor)
+	printer.Println("                \\         .  ./")
+	printer.Println("              \\      .:\" \";'.:..\" \"   /")
+	printer.Println("                  (M^^.^~~:.'\" \").")
+	printer.Println("            -   (/  .    . . \\ \\)  -")
+	printer.Println("               ((| :. ~ ^  :. .|))")
+	printer.Println("            -   (\\- |  \\ /  |  /)  -")
+	printer.Println("                 -\\  \\     /  /-")
+	printer.Println("                   \\  \\   /  /")
+	printer.SetForegroundColor(planeColor)
+}
+
+func resultOfShot(isHit bool) {
+	if isHit {
+		drawExplosion()
+		printer.SetForegroundColor(HitColor)
+		printer.Println("Yeah ! Nice hit !")
+	} else {
+		printer.SetForegroundColor(MissColor)
+		printer.Println("Miss")
+	}
+	printer.SetForegroundColor(planeColor)
+}
+
+func enemyShot() {
+	var isHit bool
+	position := getRandomPosition()
+	var err error
+	isHit, err = controller.CheckIsHit(myFleet, position)
+	if err != nil {
+		printer.Printf("Error: %s\n", err)
+	}
+	printer.Println("")
+
+	result := "hit your ship !"
+	printer.SetForegroundColor(HitColor)
+	if !isHit {
+		printer.SetForegroundColor(MissColor)
+		result = "miss"
+	}
+
+	printer.Printf("Computer shoot in %s%d and %s\n", position.Column, position.Row, result)
+	printer.SetForegroundColor(planeColor)
+	if isHit {
+		drawExplosion()
+	}
+
+}
+
+func round(number int) {
+	printer.Printf("==============================================\n")
+	printer.Printf("Round %d\n", number)
+	printer.Printf("==============================================\n")
+	myShot()
+	enemyShot()
+}
+
 func startGame() {
 	printer.Print("\033[2J\033[;H")
 	printer.Println("                  __")
@@ -59,66 +148,10 @@ func startGame() {
 	printer.Println("   \\    \\_/")
 	printer.Println("    \" \"\" \"\" \"\" \"")
 
+	i := 1
 	for {
-		printer.Println("")
-		printer.Println("Player, it's your turn")
-		printer.Println("Enter coordinates for your shot :")
-		var isHit bool
-		for scanner.Scan() {
-			input := scanner.Text()
-			if input != "" {
-				position := parsePosition(input)
-				var err error
-				isHit, err = controller.CheckIsHit(enemyFleet, position)
-				if err != nil {
-					printer.Printf("Error: %s\n", err)
-				}
-				break
-			}
-		}
-
-		if isHit {
-			beep()
-			printer.Println("                \\         .  ./")
-			printer.Println("              \\      .:\" \";'.:..\" \"   /")
-			printer.Println("                  (M^^.^~~:.'\" \").")
-			printer.Println("            -   (/  .    . . \\ \\)  -")
-			printer.Println("               ((| :. ~ ^  :. .|))")
-			printer.Println("            -   (\\- |  \\ /  |  /)  -")
-			printer.Println("                 -\\  \\     /  /-")
-			printer.Println("                   \\  \\   /  /")
-		}
-
-		if isHit {
-			printer.Println("Yeah ! Nice hit !")
-		} else {
-			printer.Println("Miss")
-		}
-
-		position := getRandomPosition()
-		var err error
-		isHit, err = controller.CheckIsHit(myFleet, position)
-		if err != nil {
-			printer.Printf("Error: %s\n", err)
-		}
-		printer.Println("")
-
-		result := "hit your ship !"
-		if !isHit {
-			result = "miss"
-		}
-		printer.Printf("Computer shoot in %s%d and %s\n", position.Column, position.Row, result)
-		if isHit {
-			beep()
-			printer.Println("                \\         .  ./")
-			printer.Println("              \\      .:\" \";'.:..\" \"   /")
-			printer.Println("                  (M^^.^~~:.'\" \").")
-			printer.Println("            -   (/  .    . . \\ \\)  -")
-			printer.Println("               ((| :. ~ ^  :. .|))")
-			printer.Println("            -   (\\- |  \\ /  |  /)  -")
-			printer.Println("                 -\\  \\     /  /-")
-			printer.Println("                   \\  \\   /  /")
-		}
+		round(i)
+		i++
 	}
 }
 
@@ -136,9 +169,37 @@ func beep() {
 }
 
 func initializeGame() {
-	initializeMyFleet()
+	//initializeMyFleet()
+
+	initializeMyFleetConst()
 
 	initializeEnemyFleet()
+}
+
+func initializeMyFleetConst() {
+	myFleet = controller.InitializeShips()
+
+	myFleet[0].SetPositions(&controller.Position{Column: letter.B, Row: 4})
+	myFleet[0].SetPositions(&controller.Position{Column: letter.B, Row: 5})
+	myFleet[0].SetPositions(&controller.Position{Column: letter.B, Row: 6})
+	myFleet[0].SetPositions(&controller.Position{Column: letter.B, Row: 7})
+	myFleet[0].SetPositions(&controller.Position{Column: letter.B, Row: 8})
+
+	myFleet[1].SetPositions(&controller.Position{Column: letter.E, Row: 6})
+	myFleet[1].SetPositions(&controller.Position{Column: letter.E, Row: 7})
+	myFleet[1].SetPositions(&controller.Position{Column: letter.E, Row: 8})
+	myFleet[1].SetPositions(&controller.Position{Column: letter.E, Row: 9})
+
+	myFleet[2].SetPositions(&controller.Position{Column: letter.A, Row: 3})
+	myFleet[2].SetPositions(&controller.Position{Column: letter.B, Row: 3})
+	myFleet[2].SetPositions(&controller.Position{Column: letter.C, Row: 3})
+
+	myFleet[3].SetPositions(&controller.Position{Column: letter.F, Row: 8})
+	myFleet[3].SetPositions(&controller.Position{Column: letter.G, Row: 8})
+	myFleet[3].SetPositions(&controller.Position{Column: letter.H, Row: 8})
+
+	myFleet[4].SetPositions(&controller.Position{Column: letter.C, Row: 5})
+	myFleet[4].SetPositions(&controller.Position{Column: letter.C, Row: 6})
 }
 
 func initializeMyFleet() {
