@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"go-battleship/cmd/console"
 	"go-battleship/cmd/letter"
 	"strconv"
@@ -11,6 +12,10 @@ type Position struct {
 	Column letter.Letter
 	Row    int
 	Hitted bool
+}
+
+func (p Position) String() string {
+	return fmt.Sprintf("%s%d", p.Column.String(), p.Row)
 }
 
 type Ship struct {

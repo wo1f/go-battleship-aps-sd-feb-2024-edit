@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"go-battleship/cmd/places"
 	"math/rand"
 	"os"
 	"strconv"
@@ -192,37 +193,11 @@ func beep() {
 }
 
 func initializeGame() {
-	initializeMyFleet()
+	//initializeMyFleet()
 
-	//initializeMyFleetConst()
+	myFleet = places.GetRandomPlace()
 
-	initializeEnemyFleet()
-}
-
-func initializeMyFleetConst() {
-	myFleet = controller.InitializeShips()
-
-	myFleet[0].SetPositions(&controller.Position{Column: letter.B, Row: 4})
-	myFleet[0].SetPositions(&controller.Position{Column: letter.B, Row: 5})
-	myFleet[0].SetPositions(&controller.Position{Column: letter.B, Row: 6})
-	myFleet[0].SetPositions(&controller.Position{Column: letter.B, Row: 7})
-	myFleet[0].SetPositions(&controller.Position{Column: letter.B, Row: 8})
-
-	myFleet[1].SetPositions(&controller.Position{Column: letter.E, Row: 6})
-	myFleet[1].SetPositions(&controller.Position{Column: letter.E, Row: 7})
-	myFleet[1].SetPositions(&controller.Position{Column: letter.E, Row: 8})
-	myFleet[1].SetPositions(&controller.Position{Column: letter.E, Row: 9})
-
-	myFleet[2].SetPositions(&controller.Position{Column: letter.A, Row: 3})
-	myFleet[2].SetPositions(&controller.Position{Column: letter.B, Row: 3})
-	myFleet[2].SetPositions(&controller.Position{Column: letter.C, Row: 3})
-
-	myFleet[3].SetPositions(&controller.Position{Column: letter.F, Row: 8})
-	myFleet[3].SetPositions(&controller.Position{Column: letter.G, Row: 8})
-	myFleet[3].SetPositions(&controller.Position{Column: letter.H, Row: 8})
-
-	myFleet[4].SetPositions(&controller.Position{Column: letter.C, Row: 5})
-	myFleet[4].SetPositions(&controller.Position{Column: letter.C, Row: 6})
+	enemyFleet = places.GetRandomPlace()
 }
 
 func initializeMyFleet() {
@@ -230,7 +205,7 @@ func initializeMyFleet() {
 	//scanner := bufio.NewScanner(os.Stdin)
 	myFleet = controller.InitializeShips()
 
-	printer.Println("Please position your fleet (Game board has size from A to H and 1 to 8) :")
+	printer.Println("Please position your places (Game board has size from A to H and 1 to 8) :")
 
 	for _, ship := range myFleet {
 		printer.Println("")
