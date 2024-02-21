@@ -21,6 +21,24 @@ type Ship struct {
 	Color     console.Color
 }
 
+type Fleet struct {
+	AircraftCarrier *Ship
+	Battleship      *Ship
+	Submarine       *Ship
+	Destroyer       *Ship
+	PatrolBoat      *Ship
+}
+
+func NewFleet() *Fleet {
+	return &Fleet{
+		AircraftCarrier: NewShip("Aircraft Carrier", 5, console.CADET_BLUE),
+		Battleship:      NewShip("Battleship", 4, console.RED),
+		Submarine:       NewShip("Submarine", 3, console.CHARTREUSE),
+		Destroyer:       NewShip("Destroyer", 3, console.YELLOW),
+		PatrolBoat:      NewShip("Patrol Boat", 2, console.ORANGE),
+	}
+}
+
 func NewPosition(letter letter.Letter, number int) *Position {
 	return &Position{Column: letter, Row: number}
 }

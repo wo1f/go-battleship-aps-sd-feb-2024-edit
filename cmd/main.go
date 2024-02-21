@@ -259,32 +259,6 @@ func getRandomPosition() *controller.Position {
 	return &controller.Position{Column: letter, Row: number}
 }
 
-func initializeEnemyFleet() {
-	enemyFleet = controller.InitializeShips()
-
-	enemyFleet[0].SetPositions(&controller.Position{Column: letter.B, Row: 4})
-	enemyFleet[0].SetPositions(&controller.Position{Column: letter.B, Row: 5})
-	enemyFleet[0].SetPositions(&controller.Position{Column: letter.B, Row: 6})
-	enemyFleet[0].SetPositions(&controller.Position{Column: letter.B, Row: 7})
-	enemyFleet[0].SetPositions(&controller.Position{Column: letter.B, Row: 8})
-
-	enemyFleet[1].SetPositions(&controller.Position{Column: letter.E, Row: 6})
-	enemyFleet[1].SetPositions(&controller.Position{Column: letter.E, Row: 7})
-	enemyFleet[1].SetPositions(&controller.Position{Column: letter.E, Row: 8})
-	enemyFleet[1].SetPositions(&controller.Position{Column: letter.E, Row: 9})
-
-	enemyFleet[2].SetPositions(&controller.Position{Column: letter.A, Row: 3})
-	enemyFleet[2].SetPositions(&controller.Position{Column: letter.B, Row: 3})
-	enemyFleet[2].SetPositions(&controller.Position{Column: letter.C, Row: 3})
-
-	enemyFleet[3].SetPositions(&controller.Position{Column: letter.F, Row: 8})
-	enemyFleet[3].SetPositions(&controller.Position{Column: letter.G, Row: 8})
-	enemyFleet[3].SetPositions(&controller.Position{Column: letter.H, Row: 8})
-
-	enemyFleet[4].SetPositions(&controller.Position{Column: letter.C, Row: 5})
-	enemyFleet[4].SetPositions(&controller.Position{Column: letter.C, Row: 6})
-}
-
 const HitColor = console.ORANGE
 const MissColor = console.CADET_BLUE
 const planeColor = console.WHITE
