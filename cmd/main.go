@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"go-battleship/cmd/places"
 	"math/rand"
 	"os"
 	"strconv"
@@ -138,9 +139,10 @@ func beep() {
 func initializeGame() {
 	initializeMyFleet()
 
-	initializeEnemyFleet()
-}
+	//myFleet = places.GetRandomPlace()
 
+	enemyFleet = places.GetRandomPlace()
+}
 func initializeMyFleet() {
 	//reader := bufio.NewReader(os.Stdin)
 	//scanner := bufio.NewScanner(os.Stdin)
@@ -173,30 +175,4 @@ func getRandomPosition() *controller.Position {
 	letter := letter.Letter(rand.Intn(lines-1) + 1)
 	number := rand.Intn(rows-1) + 1
 	return &controller.Position{Column: letter, Row: number}
-}
-
-func initializeEnemyFleet() {
-	enemyFleet = controller.InitializeShips()
-
-	enemyFleet[0].SetPositions(&controller.Position{Column: letter.B, Row: 4})
-	enemyFleet[0].SetPositions(&controller.Position{Column: letter.B, Row: 5})
-	enemyFleet[0].SetPositions(&controller.Position{Column: letter.B, Row: 6})
-	enemyFleet[0].SetPositions(&controller.Position{Column: letter.B, Row: 7})
-	enemyFleet[0].SetPositions(&controller.Position{Column: letter.B, Row: 8})
-
-	enemyFleet[1].SetPositions(&controller.Position{Column: letter.E, Row: 6})
-	enemyFleet[1].SetPositions(&controller.Position{Column: letter.E, Row: 7})
-	enemyFleet[1].SetPositions(&controller.Position{Column: letter.E, Row: 8})
-	enemyFleet[1].SetPositions(&controller.Position{Column: letter.E, Row: 9})
-
-	enemyFleet[2].SetPositions(&controller.Position{Column: letter.A, Row: 3})
-	enemyFleet[2].SetPositions(&controller.Position{Column: letter.B, Row: 3})
-	enemyFleet[2].SetPositions(&controller.Position{Column: letter.C, Row: 3})
-
-	enemyFleet[3].SetPositions(&controller.Position{Column: letter.F, Row: 8})
-	enemyFleet[3].SetPositions(&controller.Position{Column: letter.G, Row: 8})
-	enemyFleet[3].SetPositions(&controller.Position{Column: letter.H, Row: 8})
-
-	enemyFleet[4].SetPositions(&controller.Position{Column: letter.C, Row: 5})
-	enemyFleet[4].SetPositions(&controller.Position{Column: letter.C, Row: 6})
 }

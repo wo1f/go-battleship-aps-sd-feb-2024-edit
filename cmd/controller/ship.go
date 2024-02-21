@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"go-battleship/cmd/console"
 	"go-battleship/cmd/letter"
 	"strconv"
@@ -10,6 +11,18 @@ import (
 type Position struct {
 	Column letter.Letter
 	Row    int
+}
+
+func (p Position) String() string {
+	return fmt.Sprintf("%s%d", p.Column.String(), p.Row)
+}
+
+type Fleet struct {
+	AircraftCarrier *Ship
+	Battleship      *Ship
+	Submarine       *Ship
+	Destroyer       *Ship
+	PatrolBoat      *Ship
 }
 
 type Ship struct {

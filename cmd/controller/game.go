@@ -38,6 +38,16 @@ func InitializeShips() []*Ship {
 	}
 }
 
+func NewFleet() *Fleet {
+	return &Fleet{
+		AircraftCarrier: NewShip("Aircraft Carrier", 5, console.CADET_BLUE),
+		Battleship:      NewShip("Battleship", 4, console.RED),
+		Submarine:       NewShip("Submarine", 3, console.CHARTREUSE),
+		Destroyer:       NewShip("Destroyer", 3, console.YELLOW),
+		PatrolBoat:      NewShip("Patrol Boat", 2, console.ORANGE),
+	}
+}
+
 func NewShip(name string, size int, color console.Color) *Ship {
 	return &Ship{
 		Name:  name,
